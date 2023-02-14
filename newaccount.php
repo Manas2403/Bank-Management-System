@@ -1,9 +1,37 @@
+<?php
+    $server = "localhost";
+    $user = "root";
+    $password = "root";
+    $con = mysqli_connect($server,$user,$password);
+    if (!$con) {
+        die("connection to this data is failed due to: " . mysqli_connect_error());
+    }
+    if(isset($_POST['name'])&& isset($_POST['address']) && isset($_POST['aadhar']) && isset($_POST['acc-type'])){
+    $name=($_POST["name"]);
+    $address=($_POST["address"]);
+    $aadhar=($_POST["aadhar"]);
+    $acc_type=($_POST["acc-type"]);
+    $num=rand(10,100);
+    $sql = "INSERT INTO `bank`.`accounttable` (`Account_Number`, `Account_Type`, `BCode`, `Name`, `Gender`, `DOB`, `Address`, `Aadhar`, `Balance`) VALUES
+    ('SBI2343231000$num', '$acc_type', 'SBI234323', '$name', 'M', '2018-09-06', '$address', '$aadhar', 0);";
+if ($con->query($sql) === TRUE) {
+  foreach ($_POST as $key => $value) {
+    unset($_POST[$key]);
+}
+  echo "New record created successfully";
+  header('Location: customer list.php');
+} else {
+  echo "Error: " . $sql . "<br>" . $con->error;
+}
+    }
+$con->close();
+    ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
   <meta charset="utf-8">
-  <title>Send Money</title>
+  <title>New Account</title>
 
   <!-- Googlefont -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;900&family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
@@ -39,13 +67,13 @@
               <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item ">
-              <a class="nav-link" href="customer list.html">View Customers</a>
+              <a class="nav-link" href="customer list.php">View Customers</a>
             </li>
             <li class="nav-item  ">
               <a class="nav-link" href="about.html">About Allahabad Bank</a>
             </li>
             <li class="nav-item active ">
-              <a class="nav-link" href="sendmoney.html">Send Money</a>
+              <a class="nav-link" href="newaccount.php">New Account</a>
             </li>
           </ul>
         </div>
@@ -53,7 +81,7 @@
   </div>
 
 
-  <h1 class="big-heading">Send Money </h1>
+  <h1 class="big-heading">New Account</h1>
     </div>
 
   </section>
@@ -63,67 +91,53 @@
 
       <div class="row">
         <div style="display: flex;align-items:center;justify-content:center">
-        <form action="">
+        <form action="newaccount.php"method="POST">
             <div class="input-group mb-3">
                 <input
                     type="text"
-                    id="enterSName"
+                    name="name" 
+                    id="name"
                     class="form-control"
-                    placeholder="Sender's Username"
-                   required
-                />
-                <div class="input-group-append">
-                    <span
-                        class="input-group-text"
-                        id="basic-addon2"
-                        >@gmail.com</span
-                    >
-                </div>
-            </div>
-            <div class="input-group mb-3">
-                <input
-                    type="text"
-                    id="enterName"
-                    class="form-control"
-                    placeholder="Recipient's Username"
+                    placeholder="Name"
                     required
                 />
-                <div class="input-group-append">
-                    <span
-                        class="input-group-text"
-                        id="basic-addon2"
-                        >@gmail.com</span
-                    >
-                </div>
+                
             </div>
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">₹</span>
-                </div>
                 <input
                     type="text"
-                    id="enterAmount"
+                    name="address" 
+                    id="address"
                     class="form-control"
-                    placeholder="Enter Amount"
-                    aria-label="Amount"
+                    placeholder="Address"
                     required
                 />
-                <div class="input-group-append">
-                    <span class="input-group-text"
-                        >.00</span
-                    >
-                </div>
+                
             </div>
+            <div class="input-group mb-3">
+                <input
+                    type="number"
+                    name="aadhar"
+                    id="aadhar"
+                    class="form-control"
+                    placeholder="Aadhar Number"
+                    required
+                />
+                
+            </div>
+            <div class="input-group mb-3">
+                <input
+                    type="text"
+                    name="acc-type" 
+                    id="acc-type"
+                    class="form-control"
+                    placeholder="Account Type"
+                    required
+                />
+                
+            </div>
+            <a href="newaccount.php" style="color:black;margin:0; text-decoration: none;"> <input style="border-radius:0.5rem;margin-top: 3rem;" type="submit" value="Create" onClick="sendMoney()"></a>
         </form>
-        <div class="modal-footer">
-            <button
-                type="button"
-                onclick="sendMoney()"
-                class="btn btn-success"
-            >
-                Send Money
-            </button>
-        </div>
     </div>
       </div>
 
@@ -147,34 +161,6 @@
       <br>
     </div>
   </footer>
-<script >
-    function sendMoney(){
-        var enterName = document.getElementById("enterName").value;
-        var enterAmount = parseInt(document.getElementById("enterAmount").value);
-        var enterSName = document.getElementById("enterSName").value;
-        var findSenderBankAccount = enterSName + "BankBalance";
-        var enterSAmount = parseInt(document.getElementById(findSenderBankAccount).innerHTML);
-        if (enterAmount > enterSAmount){
-            alert("Insufficient Balance!")
-        }
-        else{
-            var findUserBankAccount = enterName + "BankBalance";
-            var finalAmount = parseInt(document.getElementById(findUserBankAccount).innerHTML) + enterAmount;
-            var myAccountBalance = parseInt(document.getElementById(findSenderBankAccount).innerHTML) - enterAmount;
-            document.getElementById(findSenderBankAccount).innerHTML = myAccountBalance;
-            document.getElementById(findUserBankAccount).innerHTML = finalAmount;
-            alert(`Transaction Successful !!
-              ₹${enterAmount} is sent to ${enterName}@gmail.com`)
-    
-            var createPTag = document.createElement("li");
-            var textNode = document.createTextNode(`₹ ${enterAmount} is sent from the sender with email-id ${enterSName}@gmail.com to recepient with email-id ${enterName}@gmail.com on ${Date()}.`);
-            createPTag.appendChild(textNode);
-            var element = document.getElementById("transaction-history-body");
-            element.insertBefore(createPTag, element.firstChild);
-        }
-    }
-    
-</script>
 </body>
 
 </html>

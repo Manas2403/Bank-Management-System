@@ -68,7 +68,7 @@
                                 <a class="nav-link" href="index.html">Home</a>
                             </li>
                             <li class="nav-item active">
-                                <a class="nav-link" href="customer list.html"
+                                <a class="nav-link" href="customer list.php"
                                     >View Customers</a
                                 >
                             </li>
@@ -78,8 +78,8 @@
                                 >
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="sendmoney.html"
-                                    >Send Money</a
+                                <a class="nav-link" href="newaccount.php"
+                                    >New Account</a
                                 >
                             </li>
                         </ul>
@@ -251,101 +251,42 @@
                         <thead>
                             <tr>
                                 <th scope="col">Sr. No.</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">E-Mail ID</th>
+                                <th scope="col" >Name</th>
+                                <th scope="col">Account Number</th>
+                                <th scope="col">Account Type</th>
                                 <th scope="col">Bank Balance</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+    $server = "localhost";
+    $user = "root";
+    $password = "root";
+    $con = mysqli_connect($server,$user,$password);
+    if (!$con) {
+        die("connection to this data is failed due to: " . mysqli_connect_error());
+    }
+    $sql = "SELECT * FROM `bank`.`accounttable`;";
+    $query = mysqli_query($con,$sql);
+    if($query->num_rows>0){ echo "
+                            " ; while($row = $query->fetch_assoc()){ $Id =
+                            $row["Id"];$name=$row["Name"]; $Account_Number = $row["Account_Number"]; $Account_Type =
+                            $row["Account_Type"];$balance=$row["Balance"]; echo "
                             <tr>
-                                <td scope="row">1</td>
-                                <td>Adeshpal Singh</td>
-                                <td>pajji@gmail.com</td>
-                                <td>
-                                    <p id="daudBankBalance">80200</p>
-                                </td>
+                            <td>$Id</td>
+                            <td>$name</td>
+                            <td>$Account_Number</td>
+                            <td>$Account_Type</td>
+                            <td>$balance</td>
                             </tr>
-
-                            <tr>
-                                <td scope="row">2</td>
-                                <td>Vipul Jaat</td>
-                                <td>jaat@email.com</td>
-                                <td>
-                                    <p id="adityaBankBalance">61000</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">3</td>
-                                <td>Ashish Verma</td>
-                                <td>virtuosi@gmail.com</td>
-                                <td>
-                                    <p id="ayushBankBalance">45700</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">4</td>
-                                <td>Karan Sehgal</td>
-                                <td>karan@gmail.com</td>
-                                <td>
-                                    <p id="karanBankBalance">85080</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">5</td>
-                                <td>Tara tak</td>
-                                <td>tara@gmail.com</td>
-                                <td>
-                                    <p id="taraBankBalance">25200</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">6</td>
-                                <td>Vijay rana</td>
-                                <td>rana@gmail.com</td>
-                                <td>
-                                    <p id="vijayBankBalance">68000</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">7</td>
-                                <td>Pura Sharmaa</td>
-                                <td>puru@gmail.com</td>
-                                <td>
-                                    <p id="puruBankBalance">41000</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">8</td>
-                                <td>Aviral khan</td>
-                                <td>aviral@gmail.com</td>
-                                <td>
-                                    <p id="anuragBankBalance">36700</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">9</td>
-                                <td>Rajesh Purohit</td>
-                                <td>rajesh@gmail.com</td>
-                                <td>
-                                    <p id="rajeshBankBalance">40700</p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td scope="row">10</td>
-                                <td>Sagar Tiwari</td>
-                                <td>sagar@gmail.com</td>
-                                <td>
-                                    <p id="sagarBankBalance">25000</p>
-                                </td>
-                            </tr>
+                            "; } } else{ ?>
+                            <h1 style="text-align: center">
+                                SORRY DATA NOT AVAILABLE GO BACK TO HOME PAGE
+                                AND TRY AGAIN
+                            </h1>
+                            <?php
+    }
+    ?>
                         </tbody>
                     </table>
                 </div>
